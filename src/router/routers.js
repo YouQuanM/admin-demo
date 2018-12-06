@@ -31,7 +31,6 @@ export default [
     redirect: '/home',
     component: Main,
     meta: {
-      hideInMenu: true, // 左侧菜单不显示
       notCache: true // 不缓存
     },
     children: [
@@ -39,7 +38,8 @@ export default [
         path: '/home',
         name: 'home',
         meta: {
-          title: '首页'
+          title: '首页',
+          icon: 'md-home'
         },
         component: () => import('@/view/home/home.vue')
       }
@@ -80,7 +80,7 @@ export default [
         name: 'err_index',
         meta: {
           title: '错误码管理',
-          icon: 'md-menu'
+          icon: 'ios-bug'
         },
         component: () => import('@/view/err-manage/err-manage.vue')
       }

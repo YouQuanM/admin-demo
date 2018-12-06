@@ -1,8 +1,8 @@
-import axios from '@/libs/api.request'
+import axios from '@/libs/axios-http'
 
-export const getTableData = () => {
-  return axios.request({
-    url: 'get_table_data',
+export const getLogList = () => {
+  return axios.get({
+    url: 'getList',
     method: 'get'
   })
 }
