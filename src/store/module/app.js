@@ -12,11 +12,15 @@ import {
   localRead
 } from '@/libs/util'
 import beforeClose from '@/router/before-close'
-import { saveErrorLogger } from '@/api/data'
+import {
+  saveErrorLogger
+} from '@/api/data'
 import router from '@/router'
 import routers from '@/router/routers'
 import config from '@/config'
-const { homeName } = config
+const {
+  homeName
+} = config
 
 const closePage = (state, route) => {
   const nextRoute = getNextRoute(state.tagNavList, route)
@@ -74,7 +78,10 @@ export default {
         closePage(state, route)
       }
     },
-    addTag (state, { route, type = 'unshift' }) {
+    addTag (state, {
+      route,
+      type = 'unshift'
+    }) {
       let router = getRouteTitleHandled(route)
       if (!routeHasExist(state.tagNavList, router)) {
         if (type === 'push') state.tagNavList.push(router)
@@ -97,9 +104,18 @@ export default {
     }
   },
   actions: {
-    addErrorLog ({ commit, rootState }, info) {
+    addErrorLog ({
+      commit,
+      rootState
+    }, info) {
       if (!window.location.href.includes('error_logger_page')) commit('setHasReadErrorLoggerStatus', false)
-      const { user: { token, userId, userName } } = rootState
+      const {
+        user: {
+          token,
+          userId,
+          userName
+        }
+      } = rootState
       let data = {
         ...info,
         time: Date.parse(new Date()),
