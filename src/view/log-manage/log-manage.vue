@@ -1,15 +1,15 @@
 <style lang="less">
-  @import '../../styles/common.less';
-  @import './log-manage.less';
+@import "../../assets/styles/common.less";
+@import "./log-manage.less";
 </style>
 
 <template>
-  <div class="log-manage" >
+  <div class="log-manage">
     <Row>
       <Col span="5">
         <label>工程项目：</label>
         <Select v-model="projectFunctionId" clearable placeholder="请选择工程项目">
-            <Option v-for="item in projectList" :value="item.id" :key="item.id">{{ item.taskCode }}</Option>
+          <Option v-for="item in projectList" :value="item.id" :key="item.id">{{ item.taskCode }}</Option>
         </Select>
       </Col>
       <Col span="5">
@@ -26,22 +26,22 @@
     <Row>
       <Col span="5">
         <label>日志描述：</label>
-        <Input v-model="logText" clearable placeholder="请输入日志描述" />
+        <Input v-model="logText" clearable placeholder="请输入日志描述"/>
       </Col>
       <Col span="5">
         <label>输出参数：</label>
-        <Input v-model="consoleParams" clearable placeholder="请输入输出参数" />
+        <Input v-model="consoleParams" clearable placeholder="请输入输出参数"/>
       </Col>
       <Col span="5">
         <label>日志级别：</label>
         <Select v-model="level" placeholder="日志级别" clearable>
-            <Option v-for="(item,index) in levelList" :value="item" :key="index">{{ item }}</Option>
+          <Option v-for="(item,index) in levelList" :value="item" :key="index">{{ item }}</Option>
         </Select>
       </Col>
       <Col span="4">
         <label>报&nbsp;&nbsp;警：</label>
         <Select v-model="alarm" placeholder="是否报警" clearable>
-            <Option v-for="item in alarmList" :value="item.val" :key="item.val">{{ item.label }}</Option>
+          <Option v-for="item in alarmList" :value="item.val" :key="item.val">{{ item.label }}</Option>
         </Select>
       </Col>
       <Col span="3" style="margin-right: 0px;">
@@ -50,8 +50,16 @@
       </Col>
     </Row>
     <div>
-        <Table :columns="columns" ref="selection" :data="logList" style="margin: 10px auto"></Table>
-        <Page :total="totalListNum" show-sizer show-total @on-change="changePage" @on-page-size-change="changePageSize" :current.sync="current" style="float: right;"></Page>
+      <Table :columns="columns" ref="selection" :data="logList" style="margin: 10px auto"></Table>
+      <Page
+        :total="totalListNum"
+        show-sizer
+        show-total
+        @on-change="changePage"
+        @on-page-size-change="changePageSize"
+        :current.sync="current"
+        style="float: right;"
+      ></Page>
     </div>
   </div>
 </template>
@@ -73,10 +81,7 @@ export default {
       level: '', // 日志级别
       levelList: ['DEBUG', 'INFO', 'WARN', 'ERROR'],
       alarm: '',
-      alarmList: [
-        {val: 'Y', label: '是'},
-        {val: 'N', label: '否'}
-      ],
+      alarmList: [{ val: 'Y', label: '是' }, { val: 'N', label: '否' }],
       logList: [],
       columns: [
         {
@@ -115,17 +120,21 @@ export default {
           align: 'center',
           width: 120,
           render: (h, params) => {
-            return h('Button', {
-              props: {
-                type: params.row.status === 1 ? 'error' : 'primary',
-                size: 'small'
-              },
-              on: {
-                click: () => {
-                  this.isUse(params.row)
+            return h(
+              'Button',
+              {
+                props: {
+                  type: params.row.status === 1 ? 'error' : 'primary',
+                  size: 'small'
+                },
+                on: {
+                  click: () => {
+                    this.isUse(params.row)
+                  }
                 }
-              }
-            }, params.row.status === 1 ? '停用' : '启动')
+              },
+              params.row.status === 1 ? '停用' : '启动'
+            )
           }
         }
       ],
@@ -140,23 +149,27 @@ export default {
   },
   methods: {
     isUse (row) {
-      axios.post('portal/funcLog/updFuncionLog', {
-        id: row.id,
-        status: row.status
-      }).then(result => {
-        if (result.data.code === 0) {
-          Message.success(result.data.msg)
-          row.status = row.status === 1 ? 0 : 1
-        }
-      })
+      axios
+        .post('portal/funcLog/updFuncionLog', {
+          id: row.id,
+          status: row.status
+        })
+        .then(result => {
+          if (result.data.code === 0) {
+            Message.success(result.data.msg)
+            row.status = row.status === 1 ? 0 : 1
+          }
+        })
     },
     // 获取工程项目列表
     getProjectList () {
-      axios.post('portal/pfunc/projectList', {
-        configurationCode: 'LOG'
-      }).then(result => {
-        this.projectList = result.data.data ? result.data.data : []
-      })
+      axios
+        .post('portal/pfunc/projectList', {
+          configurationCode: 'LOG'
+        })
+        .then(result => {
+          this.projectList = result.data.data ? result.data.data : []
+        })
     },
     // 查询项目日志列表
     search () {
