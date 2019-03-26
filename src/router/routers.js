@@ -15,99 +15,92 @@ import Main from '@/components/main'
  * }
  */
 
-export default [
-  {
-    path: '/login',
-    name: 'login',
-    meta: {
-      title: 'Login - 登录',
-      hideInMenu: true
-    },
-    component: () => import('@/view/login/login.vue')
+export default [{
+  path: '/login',
+  name: 'login',
+  meta: {
+    title: 'Login - 登录',
+    hideInMenu: true
   },
-  {
-    path: '/',
-    name: '_home',
-    redirect: '/home',
-    component: Main,
-    meta: {
-      notCache: true // 不缓存
-    },
-    children: [
-      {
-        path: '/home',
-        name: 'home',
-        meta: {
-          title: '首页',
-          icon: 'md-home'
-        },
-        component: () => import('@/view/home/home.vue')
-      }
-    ]
+  component: () => import('@/view/login/login.vue')
+},
+{
+  path: '/',
+  name: '_home',
+  redirect: '/home',
+  component: Main,
+  meta: {
+    notCache: true // 不缓存
   },
+  children: [{
+    path: '/home',
+    name: 'home',
+    meta: {
+      title: '首页',
+      icon: 'md-home'
+    },
+    component: () => import('@/view/home/home.vue')
+  }]
+},
   // 日志码管理
-  {
-    path: '/log',
-    name: 'log_manage',
-    component: Main,
+{
+  path: '/log',
+  name: 'log_manage',
+  component: Main,
+  meta: {
+    hideInBread: true
+  },
+  children: [{
+    path: 'log_index',
+    name: 'log_index',
     meta: {
-      hideInBread: true
+      title: '日志码管理',
+      icon: 'md-menu'
     },
-    children: [
-      {
-        path: 'log_index',
-        name: 'log_index',
-        meta: {
-          title: '日志码管理',
-          icon: 'md-menu'
-        },
-        component: () => import('@/view/log-manage/log-manage.vue')
-      }
-    ]
+    component: () => import('@/view/log-manage/log-manage.vue')
+  }]
 
-  },
+},
   // 错误码管理
-  {
-    path: '/err',
-    name: 'err_manage',
-    component: Main,
-    meta: {
-      hideInBread: true
-    },
-    children: [
-      {
-        path: 'err_index',
-        name: 'err_index',
-        meta: {
-          title: '错误码管理',
-          icon: 'ios-bug'
-        },
-        component: () => import('@/view/err-manage/err-manage.vue')
-      }
-    ]
+{
+  path: '/err',
+  name: 'err_manage',
+  component: Main,
+  meta: {
+    hideInBread: true
   },
-  {
-    path: '/403',
-    name: 'error_403',
+  children: [{
+    path: 'err_index',
+    name: 'err_index',
     meta: {
-      hideInMenu: true
+      title: '错误码管理',
+      icon: 'ios-bug'
     },
-    component: () => import('@/view/error-page/403.vue')
+    component: () => import('@/view/err-manage/err-manage.vue')
+  }]
+},
+{
+  path: '/403',
+  name: 'error_403',
+  meta: {
+    hideInMenu: true
   },
-  {
-    path: '/404',
-    name: 'error_404',
-    meta: {
-      hideInMenu: true
-    },
-    component: () => import('@/view/error-page/404.vue')
+  component: () => import('@/view/error-page/403.vue')
+},
+{
+  path: '/404',
+  name: 'error_404',
+  meta: {
+    hideInMenu: true
   },
-  {
-    path: '/500',
-    name: 'error_500',
-    meta: {
-      hideInMenu: true
-    },
-    component: () => import('@/view/error-page/500.vue')
-  }
+  component: () => import('@/view/error-page/404.vue')
+},
+{
+  path: '/500',
+  name: 'error_500',
+  meta: {
+    hideInMenu: true
+  },
+  component: () => import('@/view/error-page/500.vue')
+}
 ]
