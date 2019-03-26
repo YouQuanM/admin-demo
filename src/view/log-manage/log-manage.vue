@@ -1,6 +1,5 @@
 <style lang="less">
 @import "../../assets/styles/common.less";
-@import "./log-manage.less";
 </style>
 
 <template>
@@ -213,3 +212,27 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+  .log-manage {
+  width: 100%;
+  height: 100%;
+
+  .ivu-col{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0 20px 20px 0;
+    label {
+      width: 42%;
+      margin-right: 10px;
+    }
+    button {
+      margin-right: 10px;
+    }
+  }
+  .ivu-btn > .ivu-icon + span {
+    margin: 0;
+  }
+}
+</style>
