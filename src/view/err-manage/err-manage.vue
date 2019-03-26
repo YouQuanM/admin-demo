@@ -1,6 +1,5 @@
 <style lang="less">
 @import "../../assets/styles/common.less";
-@import "./err-manage.less";
 </style>
 
 <template>
@@ -200,3 +199,37 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.err-manage {
+  width: 100%;
+  height: 100%;
+
+  .ivu-col{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0 20px 20px 0;
+    label {
+      width: 45%;
+      margin-right: 10px;
+    }
+    button {
+      margin-right: 10px;
+    }
+  }
+  .checkBox {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      label {
+        width: 100%;
+        padding-top: 5px;
+        font-size: 15px;
+      }
+  }
+  .ivu-btn > .ivu-icon + span {
+    margin: 0;
+  }
+}
+</style>
