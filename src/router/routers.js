@@ -79,6 +79,26 @@ export default [{
     component: () => import('@/view/err-manage/err-manage.vue')
   }]
 },
+// 报警规则管理
+{
+  path: '/rule',
+  name: 'alert_rule',
+  component: Main,
+  meta: {
+    hideInBread: true
+  },
+  children: [
+    {
+      path: 'rule_index',
+      name: 'rule_index',
+      meta: {
+        title: '报警规则管理',
+        icon: 'ios-alert'
+      },
+      component: () => import('@/view/alert-rule/alert-rule.vue')
+    }
+  ]
+},
 {
   path: '/403',
   name: 'error_403',
