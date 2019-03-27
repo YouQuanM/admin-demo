@@ -7,39 +7,35 @@
     <Row :gutter="16">
       <Col span="5">
         <label>工程项目：</label>
-        <Select v-model="projectFunctionId" clearable placeholder="请选择工程项目">
-          <Option v-for="item in projectList" :value="item.id" :key="item.id">{{ item.taskCode }}</Option>
+        <Select v-model="searchForm.projectCode" clearable placeholder="请选择工程项目">
+          <Option v-for="item in projectList" :value="item.code" :key="item.code">{{ item.name }}</Option>
         </Select>
       </Col>
       <Col span="5">
-        <label>日志代号：</label>
-        <Input v-model="code" clearable placeholder="请输入日志代号"/>
+        <label>错误code：</label>
+        <Input v-model="searchForm.code" clearable placeholder="请输入错误code"/>
       </Col>
-      <!--<Col span="5">
-        <label>项目分支：</label>
-        <Select v-model="status" clearable placeholder="请选择项目分支">
-            <Option v-for="item in statusList" :value="item.label" :key="item.value">{{ item.label }}</Option>
-        </Select>
-      </Col>-->
+      <Col span="4"></Col>
+      <Col span="4">
+        <Button @click="showAddModal" type="success">新增</Button>
+      </Col>
     </Row>
     <Row :gutter="16">
       <Col span="5">
         <label>错误描述：</label>
-        <Input v-model="errText" clearable placeholder="请输入错误描述"/>
+        <Input v-model="searchForm.text" clearable placeholder="请输入错误描述"/>
       </Col>
       <Col span="5">
-        <label>输出参数：</label>
-        <Input v-model="consoleParams" clearable placeholder="请输入输出参数"/>
-      </Col>
-      <Col span="4">
-        <label>报&nbsp;&nbsp;警：</label>
-        <Select v-model="alarm" placeholder="是否报警" clearable>
-          <Option v-for="item in alarmList" :value="item.val" :key="item.val">{{ item.label }}</Option>
+        <label>是否启用：</label>
+        <Select v-model="searchForm.status" placeholder="是否启用" clearable>
+            <Option value="0">启用</Option>
+            <Option value="1">不启用</Option>
         </Select>
       </Col>
+      <Col span="4"></Col>
       <Col span="4">
-        <Button @click="search" type="primary">查询</Button>
-        <Button @click="addList" type="primary">新增</Button>
+        <Button @click="getErrList" type="primary">查询</Button>
+        <Button @click="clearSearch">清空</Button>
       </Col>
     </Row>
     <div>
@@ -54,6 +50,31 @@
         style="float: right;"
       ></Page>
     </div>
+    <Modal
+        v-model="errModalFlag"
+        :title="modalTitle"
+        @on-ok="modalTitle === '新增错误码' ? addList() : saveEditErr()"
+        @on-cancel="errModalFlag = false">
+        <Form :label-width="80">
+          <FormItem label="项目">
+            <Select v-model="addErrForm.projectCode">
+              <Option v-for="item in projectList" :value="item.code" :key="item.code">{{ item.name }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="编码">
+            <Input v-model="addErrForm.code" placeholder="请输入编码"></Input>
+          </FormItem>
+          <FormItem label="状态">
+            <i-switch v-model="addErrForm.status">
+                <Icon type="md-checkmark" slot="open"></Icon>
+                <Icon type="md-close" slot="close"></Icon>
+            </i-switch>
+          </FormItem>
+          <FormItem label="错误描述">
+            <Input v-model="addErrForm.text" placeholder="请输入错误描述"></Input>
+          </FormItem>
+      </Form>
+    </Modal>
   </div>
 </template>
 
@@ -64,22 +85,29 @@ import { Message } from 'iview'
 export default {
   data () {
     return {
-      projectFunctionId: 0, // 项目工程
+      // flag
+      errModalFlag: false,
+      // data
+      searchForm: {
+        projectCode: '',
+        code: '',
+        status: null,
+        text: ''
+      },
+      addErrForm: {
+        id: '',
+        projectCode: '',
+        code: '',
+        status: '',
+        text: ''
+      },
+      modalTitle: '',
       projectList: [],
-      status: '', // 项目分支
-      statusList: [],
-      code: '', // 日志代号
-      errText: '', // 日志描述
-      consoleParams: '', // 输出参数
-      level: '', // 日志级别
-      levelList: ['DEBUG', 'INFO', 'WARN', 'ERROR'],
-      alarm: '',
-      alarmList: [{ val: 'Y', label: '是' }, { val: 'N', label: '否' }],
       errList: [],
       columns: [
         {
           title: '错误ID',
-          key: 'projectFunctionId',
+          key: 'id',
           width: 200,
           align: 'center'
         },
@@ -89,13 +117,13 @@ export default {
           align: 'center'
         },
         {
-          title: '错误信息',
+          title: '错误描述',
           key: 'text',
           align: 'center'
         },
         {
-          title: '添加人',
-          key: 'billNum',
+          title: '操作人',
+          key: 'operator',
           align: 'center'
         },
         {
@@ -106,22 +134,46 @@ export default {
         {
           title: '操作',
           align: 'center',
-          width: 120,
+          width: 150,
           render: (h, params) => {
             return h(
-              'Button',
-              {
-                props: {
-                  type: params.row.status === 1 ? 'error' : 'primary',
-                  size: 'small'
-                },
-                on: {
-                  click: () => {
-                    this.isUse(params.row)
-                  }
-                }
-              },
-              params.row.status === 1 ? '停用' : '启动'
+              'div', [
+                h(
+                  'Button',
+                  {
+                    props: {
+                      type: params.row.status === 1 ? 'error' : 'primary',
+                      size: 'small'
+                    },
+                    style: {
+                      'margin-right': '5px'
+                    },
+                    on: {
+                      click: () => {
+                        this.isUse(params.row)
+                      }
+                    }
+                  },
+                  params.row.status === 1 ? '停用' : '启动'
+                ),
+                h(
+                  'Button',
+                  {
+                    props: {
+                      size: 'small'
+                    },
+                    style: {
+                      'margin-right': '5px'
+                    },
+                    on: {
+                      click: () => {
+                        this.showEditModal(params.row)
+                      }
+                    }
+                  },
+                  '修改'
+                )
+              ]
             )
           }
         }
@@ -134,67 +186,109 @@ export default {
   },
   created () {
     this.getProjectList()
+    this.getErrList()
   },
   methods: {
     isUse (row) {
       axios
-        .post('portal/funcErr/updFuncionErr', {
+        .post('cc/funcErr/updFuncionErr', {
           id: row.id,
-          status: row.status
+          status: row.status === 0 ? 1 : 0
         })
         .then(result => {
-          if (result.data.code === 0) {
+          if (result.data.code === 1) {
             Message.success(result.data.msg)
-            row.status = row.status === 1 ? 0 : 1
+            this.getErrList()
           }
         })
     },
     // 获取工程项目列表
     getProjectList () {
-      axios
-        .post('portal/pfunc/projectList', {
-          configurationCode: 'ERR'
-        })
-        .then(result => {
-          this.projectList = result.data.data ? result.data.data : []
-        })
+      axios.get('/cc/project/getList').then(result => {
+        this.projectList = result.data.data ? result.data.data : []
+      })
     },
     // 查询项目错误码列表
-    search () {
-      let params = {
-        projectFunctionId: this.projectFunctionId, // 项目工程id
-        code: this.code, // 错误
-        text: this.errText, // 错误描述+参数
-        alarm: this.alarm,
-        pageNum: this.pageNum,
-        pageSize: this.pageSize
+    getErrList () {
+      let data = {
+        params: {
+          projectCode: this.searchForm.projectCode, // 项目工程id
+          code: this.searchForm.code, // 错误
+          text: this.searchForm.text, // 错误描述
+          status: this.searchForm.status,
+          pageNum: this.pageNum,
+          pageSize: this.pageSize
+        }
       }
-      axios.post('portal/funcErr/getList', params).then(result => {
+      axios.get('/cc/funcErr/getList', data).then(result => {
         this.errList = result.data.data ? result.data.data : []
       })
+    },
+    // 显示增加弹窗
+    showAddModal () {
+      this.errModalFlag = true;
+      this.modalTitle = '新增错误码';
     },
     // 增加
     addList () {
       let params = {
-        projectFunctionId: this.projectFunctionId, // 项目工程id
-        code: this.code,
-        alarm: this.alarm,
-        status: 0, // 状态
-        text: this.errText + this.consoleParams // 错误描述+参数
+        projectCode: this.addErrForm.projectCode, // 项目工程id
+        code: this.addErrForm.code,
+        status: this.addErrForm.status ? 0 : 1, // 状态
+        text: this.addErrForm.text // 错误描述
       }
-      axios.post('portal/funcErr/addFunctionErr', params).then(result => {
-        if (result.data.code === 0) {
+      axios.post('cc/funcErr/addFunctionErr', params).then(result => {
+        if (result.data.code === 1) {
           Message.success(result.data.msg)
         }
       })
     },
+    // 显示修改弹窗
+    showEditModal (row) {
+      this.addErrForm = {
+        id: row.id,
+        projectCode: row.projectCode,
+        code: row.code,
+        status: row.status === 1,
+        text: row.text
+      }
+      this.modalTitle = '修改错误码';
+      this.errModalFlag = true;
+    },
+    // 保存修改
+    saveEditErr () {
+      let data = {
+        id: this.addErrForm.id, // 错误id
+        projectCode: this.addErrForm.projectCode, // 项目工程id
+        code: this.addErrForm.Code, // 错误code
+        status: this.addErrForm.Status ? 0 : 1, // 状态
+        text: this.addErrForm.Text// 错误描述
+      };
+      axios.post('cc/funcErr/updFuncionErr', data).then(result => {
+        if (result.data.code === 1) {
+          Message.success(result.data.msg)
+          this.getErrList()
+        } else {
+          Message.warning(result.data.msg)
+        }
+      })
+    },
+    // 清空搜索
+    clearSearch () {
+      this.searchForm = {
+        projectCode: '',
+        code: '',
+        status: null,
+        text: ''
+      }
+    },
     changePage (index) {
       this.pageNum = index
-      this.search()
+      this.getErrList()
     },
     changePageSize (index) {
       this.pageSize = index
-      this.search()
+      this.getErrList()
     }
   }
 }

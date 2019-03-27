@@ -3,14 +3,173 @@
 </style>
 
 <template>
-  <div class="home-main">
-    <h3>欢迎来到蛋壳公寓</h3>
-  </div>
+    <div class="home-main">
+      <Row>
+          <Button @click="showAddProject">添加项目</Button>
+      </Row>
+      <Row>
+        <Col span="7">
+            <Card :bordered="false">
+                <p slot="title">项目权限</p>
+                <p v-for="(item, index) in projectList" :key="index" @click="showProject(item.code)">{{item.name}}</p>
+            </Card>
+        </Col>
+        <Col span="7" offset="1">
+            <Card :bordered="false">
+                <p slot="title">机器权限</p>
+                <p>Content of card</p>
+                <p>Content of card</p>
+                <p>Content of card</p>
+            </Card>
+        </Col>
+        <Col span="7" offset="1">
+            <Card :bordered="false">
+                <p slot="title">环境权限</p>
+                <p>Content of card</p>
+                <p>Content of card</p>
+                <p>Content of card</p>
+            </Card>
+        </Col>
+      </Row>
+      <Modal
+        v-model="showProjectFlag"
+        :title="projectForm.title"
+        >
+        <Form label-position="left" :label-width="100">
+            <FormItem label="项目名称">
+                <Input v-model="projectForm.name" :disabled="!addProjectFlag" placeholder="项目名称"></Input>
+            </FormItem>
+            <FormItem label="项目编码">
+                <Input v-model="projectForm.code" :disabled="!addProjectFlag" placeholder="项目编码"></Input>
+            </FormItem>
+            <FormItem label="项目管理">
+                <Input v-model="projectForm.owner" :disabled="projectForm.isEdit" placeholder="项目管理"></Input>
+            </FormItem>
+            <FormItem label="项目成员" v-if="!addProjectFlag">
+                <Input v-model="projectForm.developer" :disabled="projectForm.isEdit"></Input>
+            </FormItem>
+            <FormItem label="创建时间" v-if="!addProjectFlag">
+                <Input v-model="projectForm.created" disabled></Input>
+            </FormItem>
+            <FormItem label="项目描述" v-if="addProjectFlag">
+                <Input v-model="projectForm.remark" placeholder="项目描述"></Input>
+            </FormItem>
+        </Form>
+        <div slot="footer">
+            <Button type="info" size="large" long @click="addProject">添加</Button>
+        </div>
+    </Modal>
+    </div>
 </template>
 
 <script>
+import axios from '@/libs/axios-http'
+
 export default {
-  name: 'home'
+  name: 'home',
+  data () {
+    return {
+      // flag
+      showProjectFlag: false,
+      addProjectFlag: false,
+      // data
+      projectList: [],
+      projectForm: {
+        isEdit: false,
+        title: '',
+        name: '',
+        code: '',
+        owner: '',
+        developer: '',
+        created: '',
+        remark: ''
+      }
+    }
+  },
+  created () {
+    this.getUserInfo()
+    this.getProjectList()
+  },
+  methods: {
+    // 获取用户信息
+    getUserInfo () {
+      axios.get('/cc/user/getUser').then((res) => {
+        if (res.data.code === 1) {
+
+        }
+      })
+    },
+    //   首页获取所有项目列表
+    getProjectList () {
+      axios.get('/cc/project/getList').then((res) => {
+        if (res.data.code === 1) {
+          this.projectList = res.data.data
+        }
+      })
+    },
+    // 获取项目详情
+    showProject (code) {
+      axios.get('/cc/project/getMembers', {
+        params: {
+          projectCode: code
+        }
+      }).then((res) => {
+        if (res.data.code === 1) {
+          this.addProjectFlag = false;
+          this.projectForm = {
+            isEdit: false,
+            title: '',
+            name: '',
+            code: '',
+            owner: '',
+            developer: '',
+            created: ''
+          };
+          this.projectForm.name = res.data.data.projectEntity.name;
+          this.projectForm.title = res.data.data.projectEntity.name;
+          this.projectForm.code = res.data.data.projectEntity.code;
+          this.projectForm.created = res.data.data.projectEntity.created;
+          this.projectForm.isEdit = res.data.data.projectEntity.isEdit === 0;
+          res.data.data.membersList.forEach((v, i) => {
+            if (v.role === 'OWNER') {
+              this.projectForm.owner += v.uid + ';';
+            } else if (v.role === 'DEVELOPER') {
+              this.projectForm.developer += v.uid + ';';
+            }
+          });
+          this.showProjectFlag = true;
+        }
+      })
+    },
+    // 添加项目
+    showAddProject () {
+      this.projectForm = {
+        isEdit: false,
+        title: '添加项目',
+        name: '',
+        code: '',
+        owner: '',
+        remark: '',
+        developer: '',
+        created: ''
+      };
+      this.showProjectFlag = true;
+      this.addProjectFlag = true;
+    },
+    // 保存项目
+    addProject () {
+      if (this.addProjectFlag) {
+        axios.post('/cc/project/initProject', {
+          name: this.projectForm.name,
+          code: this.projectForm.code,
+          remark: this.projectForm.remark,
+          owner: this.projectForm.owner
+        }).then(res => {
+
+        })
+      }
+    }
+  }
 }
 </script>
 

@@ -19,7 +19,7 @@ instance.interceptors.request.use(config => {
 // 响应拦截
 instance.interceptors.response.use(response => {
   // 响应成功
-  if (response.data.code !== 0) {
+  if (response.data.code !== 1) {
     console.log('响应成功，返回错误码')
     Message.warning(response.data.msg)
   }
