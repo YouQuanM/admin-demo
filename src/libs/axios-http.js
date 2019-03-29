@@ -2,6 +2,8 @@ import axios from 'axios'
 import config from '@/config'
 import { Message } from 'iview'
 const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
+console.log('process------------------->')
+console.log(process.env.NODE_ENV)
 
 let instance = axios.create({
   baseURL: baseUrl,
