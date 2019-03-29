@@ -12,7 +12,7 @@
         <Col span="7">
             <Card :bordered="false">
                 <p slot="title">项目权限</p>
-                <p v-for="(item, index) in projectList" :key="index" @click="showProject(item.code)">{{item.name}}</p>
+                <p class="project-list" v-for="(item, index) in projectList" :key="index" @click="showProject(item.code)">{{item.name}}</p>
             </Card>
         </Col>
       </Row>
@@ -215,5 +215,9 @@ export default {
 }
 .line-chart-con{
     height: 150px;
+}
+.project-list {
+    color: blue;
+    cursor: pointer;
 }
 </style>

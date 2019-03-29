@@ -60,7 +60,7 @@
             <Input v-model="addAlarmRuleForm.phoneNumber" placeholder="多个值之间用英文逗号分隔" disabled></Input>
           </FormItem>
           <FormItem label="邮箱地址" v-if="mailAddrFlag">
-            <Input v-model="addAlarmRuleForm.mailAddr" placeholder="多个值之间用英文逗号分隔" :maxlength="500"></Input>
+            <Input v-model="addAlarmRuleForm.mailAddr" type="textarea" :rows="3" placeholder="多个值之间用英文逗号分隔" :maxlength="500"></Input>
           </FormItem>
           <FormItem label="报警描述">
             <Input v-model="addAlarmRuleForm.alertDesc" placeholder="请输入报警描述" :maxlength="200"></Input>
