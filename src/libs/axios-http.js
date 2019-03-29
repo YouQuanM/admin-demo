@@ -19,21 +19,27 @@ instance.interceptors.request.use(config => {
 // 响应拦截
 instance.interceptors.response.use(response => {
   // 响应成功
-  if (response.data.code !== 1) {
-    console.log('响应成功，返回错误码')
+  if (response.data.code === 403) {
+    Message.warning('登录失败，请重新登录')
+    sessionStorage.clear()
+    // Cookie.setItem('username', '', -1)
+    window.location.href = response.data.msg
+  } else if (response.data.code !== 1) {
+    console.log('响应成功, 返回错误码')
     Message.warning(response.data.msg)
   }
   return response
 }, err => {
   // 响应失败错误码
-  if (err.response && err.response.code === 403) {
-    Message.warning('登录失败，请重新登录')
-    sessionStorage.clear()
-    Cookie.setItem('username', '', -1)
-    window.location.href = 'https://vms.dankegongyu.com/#/login'
-  } else {
-    Message.warning('服务器异常')
-  }
+  // if (err.response && err.response.code === 403) {
+  //   Message.warning('登录失败，请重新登录')
+  //   sessionStorage.clear()
+  //   Cookie.setItem('username', '', -1)
+  //   window.location.href = 'https://vms.dankegongyu.com/#/login'
+  // } else {
+
+  Message.warning('服务器异常')
+
   return Promise.reject(err)
 })
 

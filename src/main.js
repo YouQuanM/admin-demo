@@ -13,6 +13,7 @@ import './index.less'
 import 'iview/dist/styles/iview.css'
 import '@/assets/icons/iconfont.css'
 import TreeTable from 'tree-table-vue'
+import Axios from 'axios';
 // 实际打包时应该不引入mock
 /* eslint-disable */
 // if (process.env.NODE_ENV !== 'production') require('@/mock')
@@ -38,6 +39,8 @@ Vue.prototype.$config = config
  * 注册指令
  */
 importDirective(Vue)
+// 让axios携带cooike
+Axios.defaults.withCredentials = true
 
 /* eslint-disable no-new */
 new Vue({

@@ -14,26 +14,12 @@
                 <p v-for="(item, index) in projectList" :key="index" @click="showProject(item.code)">{{item.name}}</p>
             </Card>
         </Col>
-        <Col span="7" offset="1">
-            <Card :bordered="false">
-                <p slot="title">机器权限</p>
-                <p>Content of card</p>
-                <p>Content of card</p>
-                <p>Content of card</p>
-            </Card>
-        </Col>
-        <Col span="7" offset="1">
-            <Card :bordered="false">
-                <p slot="title">环境权限</p>
-                <p>Content of card</p>
-                <p>Content of card</p>
-                <p>Content of card</p>
-            </Card>
-        </Col>
       </Row>
       <Modal
         v-model="showProjectFlag"
         :title="projectForm.title"
+        @on-ok="disposeProjectFun"
+        @on-cancel="showProjectFlag = false"
         >
         <Form label-position="left" :label-width="100">
             <FormItem label="项目名称">
@@ -43,27 +29,25 @@
                 <Input v-model="projectForm.code" :disabled="!addProjectFlag" placeholder="项目编码"></Input>
             </FormItem>
             <FormItem label="项目管理">
-                <Input v-model="projectForm.owner" :disabled="projectForm.isEdit" placeholder="项目管理"></Input>
+                <Input v-model="projectForm.owner" :disabled="!projectForm.isEdit" placeholder="项目管理"></Input>
             </FormItem>
             <FormItem label="项目成员" v-if="!addProjectFlag">
-                <Input v-model="projectForm.developer" :disabled="projectForm.isEdit"></Input>
+                <Input v-model="projectForm.developer" :disabled="!projectForm.isEdit"></Input>
             </FormItem>
             <FormItem label="创建时间" v-if="!addProjectFlag">
                 <Input v-model="projectForm.created" disabled></Input>
             </FormItem>
-            <FormItem label="项目描述" v-if="addProjectFlag">
-                <Input v-model="projectForm.remark" placeholder="项目描述"></Input>
+            <FormItem label="项目描述">
+                <Input v-model="projectForm.remark" placeholder="项目描述" :disabled="!projectForm.isEdit"></Input>
             </FormItem>
         </Form>
-        <div slot="footer">
-            <Button type="info" size="large" long @click="addProject">添加</Button>
-        </div>
     </Modal>
     </div>
 </template>
 
 <script>
 import axios from '@/libs/axios-http'
+import { Message } from 'iview'
 
 export default {
   name: 'home',
@@ -117,24 +101,21 @@ export default {
         if (res.data.code === 1) {
           this.addProjectFlag = false;
           this.projectForm = {
-            isEdit: false,
-            title: '',
-            name: '',
-            code: '',
+            id: res.data.data.projectEntity.id,
+            isEdit: res.data.data.projectEntity.isEdit === 1,
+            title: res.data.data.projectEntity.name,
+            name: res.data.data.projectEntity.name,
+            code: res.data.data.projectEntity.code,
             owner: '',
             developer: '',
-            created: ''
+            created: res.data.data.projectEntity.created,
+            remark: res.data.data.projectEntity.remark
           };
-          this.projectForm.name = res.data.data.projectEntity.name;
-          this.projectForm.title = res.data.data.projectEntity.name;
-          this.projectForm.code = res.data.data.projectEntity.code;
-          this.projectForm.created = res.data.data.projectEntity.created;
-          this.projectForm.isEdit = res.data.data.projectEntity.isEdit === 0;
           res.data.data.membersList.forEach((v, i) => {
-            if (v.role === 'OWNER') {
-              this.projectForm.owner += v.uid + ';';
+            if (v.role === 'MASTER') {
+              this.projectForm.owner += v.uid + ',';
             } else if (v.role === 'DEVELOPER') {
-              this.projectForm.developer += v.uid + ';';
+              this.projectForm.developer += v.uid + ',';
             }
           });
           this.showProjectFlag = true;
@@ -158,15 +139,41 @@ export default {
     },
     // 保存项目
     addProject () {
+      axios.post('/cc/project/initProject', {
+        name: this.projectForm.name,
+        code: this.projectForm.code,
+        remark: this.projectForm.remark,
+        owners: this.projectForm.owner
+      }).then(res => {
+        if (res.data.code === 1) {
+          Message.success(result.data.msg);
+          this.getProjectList();
+        }
+      })
+    },
+    // 更新项目
+    updateProject () {
+      axios.post('cc/project/updProjectInfo', {
+        name: this.projectForm.name,
+        code: this.projectForm.code,
+        remark: this.projectForm.remark,
+        owners: this.projectForm.owner,
+        members: this.projectForm.developer
+      }).then(res => {
+        if (res.data.code === 1) {
+          Message.success(result.data.msg);
+          this.getProjectList();
+        }
+      })
+    },
+    // 处理添加或修改或不处理
+    disposeProjectFun () {
       if (this.addProjectFlag) {
-        axios.post('/cc/project/initProject', {
-          name: this.projectForm.name,
-          code: this.projectForm.code,
-          remark: this.projectForm.remark,
-          owner: this.projectForm.owner
-        }).then(res => {
-
-        })
+        this.addProject();
+      } else if (this.projectForm.isEdit) {
+        this.updateProject()
+      } else {
+        //  成员查看时不处理
       }
     }
   }
