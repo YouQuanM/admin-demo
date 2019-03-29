@@ -56,7 +56,7 @@
     <Modal
         v-model="addLogModalFlag"
         :title="modalTitle"
-        @on-ok="modalTitle === '新增错误' ? addList() : saveEditLog()"
+        @on-ok="modalTitle === '新增日志' ? addList() : saveEditLog()"
         @on-cancel="addLogModalFlag = false">
         <Form :label-width="80">
           <FormItem label="项目">
@@ -65,7 +65,7 @@
               </Select>
           </FormItem>
           <FormItem label="编码">
-            <Input v-model="addLogForm.Code" placeholder="请输入编码"></Input>
+            <Input v-model="addLogForm.Code" placeholder="请输入编码" maxlength="100"></Input>
           </FormItem>
           <FormItem label="状态">
             <i-switch v-model="addLogForm.Status">
@@ -82,7 +82,7 @@
               </Select>
           </FormItem>
           <FormItem label="日志信息">
-            <Input v-model="addLogForm.Text" placeholder="请输入日志信息"></Input>
+            <Input v-model="addLogForm.Text" placeholder="请输入日志信息" maxlength="200"></Input>
           </FormItem>
       </Form>
     </Modal>
@@ -155,18 +155,47 @@ export default {
         {
           title: '操作',
           align: 'center',
-          width: 120,
+          width: 150,
           render: (h, params) => {
-            return h('Button', {
-              props: {
-                size: 'small'
-              },
-              on: {
-                click: () => {
-                  this.editLog(params.row)
-                }
-              }
-            }, '修改')
+            return h(
+              'div', [
+                h(
+                  'Button',
+                  {
+                    props: {
+                      type: params.row.status === 0 ? 'error' : 'primary',
+                      size: 'small'
+                    },
+                    style: {
+                      'margin-right': '5px'
+                    },
+                    on: {
+                      click: () => {
+                        this.isUse(params.row)
+                      }
+                    }
+                  },
+                  params.row.status === 0 ? '停用' : '启动'
+                ),
+                h(
+                  'Button',
+                  {
+                    props: {
+                      size: 'small'
+                    },
+                    style: {
+                      'margin-right': '5px'
+                    },
+                    on: {
+                      click: () => {
+                        this.editLog(params.row)
+                      }
+                    }
+                  },
+                  '修改'
+                )
+              ]
+            )
           }
         }
       ],
@@ -181,6 +210,19 @@ export default {
     this.getLogList()
   },
   methods: {
+    isUse (row) {
+      axios
+        .post('cc/funcLog/updFuncionLog', {
+          id: row.id,
+          status: row.status === 0 ? 1 : 0
+        })
+        .then(result => {
+          if (result.data.code === 1) {
+            Message.success(result.data.msg)
+            this.getLogList()
+          }
+        })
+    },
     // 获取工程项目列表
     getProjectList () {
       axios.get('/cc/project/getList').then(result => {

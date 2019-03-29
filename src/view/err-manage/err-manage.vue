@@ -62,7 +62,7 @@
             </Select>
           </FormItem>
           <FormItem label="编码">
-            <Input v-model="addErrForm.code" placeholder="请输入编码"></Input>
+            <Input v-model="addErrForm.code" placeholder="请输入编码" maxlength="100"></Input>
           </FormItem>
           <FormItem label="状态">
             <i-switch v-model="addErrForm.status">
@@ -71,7 +71,7 @@
             </i-switch>
           </FormItem>
           <FormItem label="错误描述">
-            <Input v-model="addErrForm.text" placeholder="请输入错误描述"></Input>
+            <Input v-model="addErrForm.text" placeholder="请输入错误描述" maxlength="200"></Input>
           </FormItem>
       </Form>
     </Modal>
@@ -127,7 +127,7 @@ export default {
           align: 'center'
         },
         {
-          title: '添加时间',
+          title: '更新时间',
           key: 'updated',
           align: 'center'
         },
@@ -142,7 +142,7 @@ export default {
                   'Button',
                   {
                     props: {
-                      type: params.row.status === 1 ? 'error' : 'primary',
+                      type: params.row.status === 0 ? 'error' : 'primary',
                       size: 'small'
                     },
                     style: {
@@ -154,7 +154,7 @@ export default {
                       }
                     }
                   },
-                  params.row.status === 1 ? '停用' : '启动'
+                  params.row.status === 0 ? '停用' : '启动'
                 ),
                 h(
                   'Button',
@@ -240,6 +240,7 @@ export default {
       axios.post('cc/funcErr/addFunctionErr', params).then(result => {
         if (result.data.code === 1) {
           Message.success(result.data.msg)
+          this.getErrList()
         }
       })
     },

@@ -35,10 +35,10 @@
         @on-cancel="addLogModalFlag = false">
         <Form :label-width="80">
           <FormItem label="规则名称">
-            <Input v-model="addAlarmRuleForm.ruleName" placeholder="请输入规则名称" :disabled="editFlag"></Input>
+            <Input v-model="addAlarmRuleForm.ruleName" placeholder="请输入规则名称" :disabled="editFlag" maxlength="80"></Input>
           </FormItem>
           <FormItem label="工程项目">
-            <Select v-model="addAlarmRuleForm.projectCode">
+            <Select v-model="addAlarmRuleForm.projectCode" @on-change="chooseProject">
               <Option v-for="item in projectList" :value="item.code" :key="item.code">{{ item.name }}</Option>
             </Select>
           </FormItem>
@@ -60,10 +60,10 @@
             <Input v-model="addAlarmRuleForm.phoneNumber" placeholder="多个值之间用英文逗号分隔" disabled></Input>
           </FormItem>
           <FormItem label="邮箱地址" v-if="mailAddrFlag">
-            <Input v-model="addAlarmRuleForm.mailAddr" placeholder="多个值之间用英文逗号分隔"></Input>
+            <Input v-model="addAlarmRuleForm.mailAddr" placeholder="多个值之间用英文逗号分隔" maxlength="500"></Input>
           </FormItem>
           <FormItem label="报警描述">
-            <Input v-model="addAlarmRuleForm.alertDesc" placeholder="请输入报警描述"></Input>
+            <Input v-model="addAlarmRuleForm.alertDesc" placeholder="请输入报警描述" maxlength="200"></Input>
           </FormItem>
           <FormItem label="报警频率">
             <Input v-model="addAlarmRuleForm.timeFrameVal" style="width: 50px"></Input>
@@ -76,8 +76,10 @@
             <Input v-model="addAlarmRuleForm.numEvents" placeholder="请输入阈值" style="width: 50px"></Input>
             次
           </FormItem>
-          <FormItem label="目标值">
-            <Input v-model="addAlarmRuleForm.targetVal" placeholder=""></Input>
+          <FormItem label="日志代号">
+            <Select v-model="addAlarmRuleForm.targetVal" :disabled="projectCodeList.length === 0" filterable>
+              <Option v-for="item in projectCodeList" :value="item" :key="item">{{ item }}</Option>
+            </Select>
           </FormItem>
       </Form>
     </Modal>
@@ -184,6 +186,7 @@ export default {
       projectList: [],
       ruleList: [],
       detailData: {},
+      projectCodeList: [],
       columns: [
         {
           title: '规则ID',
@@ -252,7 +255,7 @@ export default {
               'div', [
                 h('Button', {
                   props: {
-                    type: params.row.status === 1 ? 'error' : 'primary',
+                    type: params.row.status === 0 ? 'error' : 'primary',
                     size: 'small'
                   },
                   style: {
@@ -263,7 +266,7 @@ export default {
                       this.isUse(params.row)
                     }
                   }
-                }, params.row.status === 1 ? '停用' : '启动'),
+                }, params.row.status === 0 ? '停用' : '启动'),
                 h('Button', {
                   props: {
                     type: 'info',
@@ -344,6 +347,24 @@ export default {
       this.editFlag = false;
       this.smsAddrFlag = false;
       this.mailAddrFlag = false;
+      this.projectCodeList = [];
+      this.addAlarmRuleForm = {
+        id: null,
+        ruleName: '',
+        ruleIndex: 'filebeat-*',
+        ruleType: 'frequency',
+        projectCode: '',
+        messageType: [],
+        mailflag: 1,
+        smsFlag: 1,
+        mailAddr: '',
+        smsAddr: '',
+        alertDesc: '',
+        timeFrameVal: '',
+        timeFrameUnit: '',
+        numEvents: '',
+        targetVal: ''
+      }
     },
     // 增加
     addList () {
@@ -361,7 +382,7 @@ export default {
         targetVal: this.addAlarmRuleForm.targetVal
       }
       axios.post('alert/rule/addConfig', params).then(result => {
-        if (result.data.code === 0) {
+        if (result.data.code === 1) {
           Message.success(result.data.msg);
           this.getAlertRule();
         }
@@ -414,6 +435,7 @@ export default {
             this.addAlarmRuleForm.messageType.push('短信');
             this.smsAddrFlag = true;
           }
+          this.chooseProject(rule.projectCode)
         }
       })
     },
@@ -448,6 +470,18 @@ export default {
         this.detailData.updatedTime = this.detailData.updatedAt.join('-');
         this.showDeatilDrawer = true;
       })
+    },
+    // 选择项目后加载对应的log
+    chooseProject (code) {
+      if (code) {
+        axios.get('cc/funcLog/getListByProjectCode', {
+          params: {
+            projectCode: code
+          }
+        }).then(result => {
+          this.projectCodeList = result.data.data ? result.data.data : []
+        })
+      }
     },
     changePage (index) {
       this.pageNum = index
