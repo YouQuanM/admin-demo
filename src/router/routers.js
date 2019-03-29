@@ -15,112 +15,104 @@ import Main from '@/components/main'
  * }
  */
 
-export default [{
-  path: '/login',
-  name: 'login',
-  meta: {
-    title: 'Login - 登录',
-    hideInMenu: true
-  },
-  component: () => import('@/view/login/login.vue')
-},
-{
-  path: '/',
-  name: '_home',
-  redirect: '/home',
-  component: Main,
-  meta: {
-    notCache: true // 不缓存
-  },
-  children: [{
-    path: '/home',
-    name: 'home',
+export default [
+  {
+    path: '/',
+    name: '_home',
+    redirect: '/home',
+    component: Main,
     meta: {
-      title: '首页',
-      icon: 'md-home'
+      notCache: true // 不缓存
     },
-    component: () => import('@/view/home/home.vue')
-  }]
-},
-  // 日志码管理
-{
-  path: '/log',
-  name: 'log_manage',
-  component: Main,
-  meta: {
-    hideInBread: true
-  },
-  children: [{
-    path: 'log_index',
-    name: 'log_index',
-    meta: {
-      title: '日志码管理',
-      icon: 'md-menu'
-    },
-    component: () => import('@/view/log-manage/log-manage.vue')
-  }]
-
-},
-  // 错误码管理
-{
-  path: '/err',
-  name: 'err_manage',
-  component: Main,
-  meta: {
-    hideInBread: true
-  },
-  children: [{
-    path: 'err_index',
-    name: 'err_index',
-    meta: {
-      title: '错误码管理',
-      icon: 'ios-bug'
-    },
-    component: () => import('@/view/err-manage/err-manage.vue')
-  }]
-},
-// 报警规则管理
-{
-  path: '/rule',
-  name: 'alert_rule',
-  component: Main,
-  meta: {
-    hideInBread: true
-  },
-  children: [
-    {
-      path: 'rule_index',
-      name: 'rule_index',
+    children: [{
+      path: '/home',
+      name: 'home',
       meta: {
-        title: '报警规则管理',
-        icon: 'ios-alert'
+        title: '首页',
+        icon: 'md-home'
       },
-      component: () => import('@/view/alert-rule/alert-rule.vue')
-    }
-  ]
-},
-{
-  path: '/403',
-  name: 'error_403',
-  meta: {
-    hideInMenu: true
+      component: () => import('@/view/home/home.vue')
+    }]
   },
-  component: () => import('@/view/error-page/403.vue')
-},
-{
-  path: '/404',
-  name: 'error_404',
-  meta: {
-    hideInMenu: true
+  // 日志码管理
+  {
+    path: '/log',
+    name: 'log_manage',
+    component: Main,
+    meta: {
+      hideInBread: true
+    },
+    children: [{
+      path: 'log_index',
+      name: 'log_index',
+      meta: {
+        title: '日志码管理',
+        icon: 'md-menu'
+      },
+      component: () => import('@/view/log-manage/log-manage.vue')
+    }]
+
   },
-  component: () => import('@/view/error-page/404.vue')
-},
-{
-  path: '/500',
-  name: 'error_500',
-  meta: {
-    hideInMenu: true
+  // 错误码管理
+  {
+    path: '/err',
+    name: 'err_manage',
+    component: Main,
+    meta: {
+      hideInBread: true
+    },
+    children: [{
+      path: 'err_index',
+      name: 'err_index',
+      meta: {
+        title: '错误码管理',
+        icon: 'ios-bug'
+      },
+      component: () => import('@/view/err-manage/err-manage.vue')
+    }]
   },
-  component: () => import('@/view/error-page/500.vue')
-}
+  // 报警规则管理
+  {
+    path: '/rule',
+    name: 'alert_rule',
+    component: Main,
+    meta: {
+      hideInBread: true
+    },
+    children: [
+      {
+        path: 'rule_index',
+        name: 'rule_index',
+        meta: {
+          title: '报警规则管理',
+          icon: 'ios-alert'
+        },
+        component: () => import('@/view/alert-rule/alert-rule.vue')
+      }
+    ]
+  },
+  {
+    path: '/403',
+    name: 'error_403',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/error-page/403.vue')
+  },
+  {
+    path: '/404',
+    name: 'error_404',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/error-page/404.vue')
+  },
+  {
+    path: '/500',
+    name: 'error_500',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('@/view/error-page/500.vue')
+  }
 ]

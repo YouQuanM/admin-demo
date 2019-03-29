@@ -71,18 +71,9 @@ export default {
     }
   },
   created () {
-    this.getUserInfo()
     this.getProjectList()
   },
   methods: {
-    // 获取用户信息
-    getUserInfo () {
-      axios.get('/cc/user/getUser').then((res) => {
-        if (res.data.code === 1) {
-
-        }
-      })
-    },
     //   首页获取所有项目列表
     getProjectList () {
       axios.get('/cc/project/getList').then((res) => {

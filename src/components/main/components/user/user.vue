@@ -1,15 +1,9 @@
 <template>
   <div class="user-avator-dropdown">
-    <p class="username">杜曼玉</p>
+    <p class="username">{{userName}}</p>
     <Dropdown @on-click="handleClick">
-      <Badge :dot="!!messageUnreadCount">
-        <Avatar :src="userAvator"/>
-      </Badge>
       <Icon :size="18" type="md-arrow-dropdown"></Icon>
       <DropdownMenu slot="list">
-        <DropdownItem name="message">个人中心
-          <!--<Badge style="margin-left: 10px" :count="messageUnreadCount"></Badge>-->
-        </DropdownItem>
         <DropdownItem name="logout">退出登录</DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -26,6 +20,10 @@ export default {
       type: String,
       default: ''
     },
+    userName: {
+      type: String,
+      default: ''
+    },
     messageUnreadCount: {
       type: Number,
       default: 0
@@ -36,11 +34,7 @@ export default {
       'handleLogOut'
     ]),
     logout () {
-      this.handleLogOut().then(() => {
-        this.$router.push({
-          name: 'login'
-        })
-      })
+      this.handleLogOut().then(() => {})
     },
     message () {
       this.$router.push({
