@@ -65,7 +65,7 @@
               </Select>
           </FormItem>
           <FormItem label="编码">
-            <Input v-model="addLogForm.Code" placeholder="请输入编码" maxlength="100"></Input>
+            <Input v-model="addLogForm.Code" placeholder="请输入编码" :maxlength="100"></Input>
           </FormItem>
           <FormItem label="状态">
             <i-switch v-model="addLogForm.Status">
@@ -82,7 +82,7 @@
               </Select>
           </FormItem>
           <FormItem label="日志信息">
-            <Input v-model="addLogForm.Text" placeholder="请输入日志信息" maxlength="200"></Input>
+            <Input v-model="addLogForm.Text" placeholder="请输入日志信息" :maxlength="200"></Input>
           </FormItem>
       </Form>
     </Modal>

@@ -35,7 +35,7 @@
         @on-cancel="addLogModalFlag = false">
         <Form :label-width="80">
           <FormItem label="规则名称">
-            <Input v-model="addAlarmRuleForm.ruleName" placeholder="请输入规则名称" :disabled="editFlag" maxlength="80"></Input>
+            <Input v-model="addAlarmRuleForm.ruleName" placeholder="请输入规则名称" :disabled="editFlag" :maxlength="80"></Input>
           </FormItem>
           <FormItem label="工程项目">
             <Select v-model="addAlarmRuleForm.projectCode" @on-change="chooseProject">
@@ -60,10 +60,10 @@
             <Input v-model="addAlarmRuleForm.phoneNumber" placeholder="多个值之间用英文逗号分隔" disabled></Input>
           </FormItem>
           <FormItem label="邮箱地址" v-if="mailAddrFlag">
-            <Input v-model="addAlarmRuleForm.mailAddr" placeholder="多个值之间用英文逗号分隔" maxlength="500"></Input>
+            <Input v-model="addAlarmRuleForm.mailAddr" placeholder="多个值之间用英文逗号分隔" :maxlength="500"></Input>
           </FormItem>
           <FormItem label="报警描述">
-            <Input v-model="addAlarmRuleForm.alertDesc" placeholder="请输入报警描述" maxlength="200"></Input>
+            <Input v-model="addAlarmRuleForm.alertDesc" placeholder="请输入报警描述" :maxlength="200"></Input>
           </FormItem>
           <FormItem label="报警频率">
             <Input v-model="addAlarmRuleForm.timeFrameVal" style="width: 50px"></Input>

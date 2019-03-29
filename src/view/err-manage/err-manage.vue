@@ -62,7 +62,7 @@
             </Select>
           </FormItem>
           <FormItem label="编码">
-            <Input v-model="addErrForm.code" placeholder="请输入编码" maxlength="100"></Input>
+            <Input v-model="addErrForm.code" placeholder="请输入编码" :maxlength="100"></Input>
           </FormItem>
           <FormItem label="状态">
             <i-switch v-model="addErrForm.status">
@@ -71,7 +71,7 @@
             </i-switch>
           </FormItem>
           <FormItem label="错误描述">
-            <Input v-model="addErrForm.text" placeholder="请输入错误描述" maxlength="200"></Input>
+            <Input v-model="addErrForm.text" placeholder="请输入错误描述" :maxlength="200"></Input>
           </FormItem>
       </Form>
     </Modal>

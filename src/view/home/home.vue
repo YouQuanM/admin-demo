@@ -24,22 +24,22 @@
         >
         <Form label-position="left" :label-width="100">
             <FormItem label="项目名称">
-                <Input v-model="projectForm.name" :disabled="!addProjectFlag" placeholder="项目名称" maxlength="50"></Input>
+                <Input v-model="projectForm.name" :disabled="!addProjectFlag" placeholder="项目名称" :maxlength="50"></Input>
             </FormItem>
             <FormItem label="项目编码">
-                <Input v-model="projectForm.code" :disabled="!addProjectFlag" placeholder="项目编码" maxlength="50"></Input>
+                <Input v-model="projectForm.code" :disabled="!addProjectFlag" placeholder="项目编码" :maxlength="50"></Input>
             </FormItem>
             <FormItem label="项目管理">
-                <Input v-model="projectForm.owner" :disabled="!projectForm.isEdit" placeholder="项目管理" maxlength="200"></Input>
+                <Input v-model="projectForm.owner" :disabled="!projectForm.isEdit" placeholder="项目管理" :maxlength="200"></Input>
             </FormItem>
             <FormItem label="项目成员" v-if="!addProjectFlag">
-                <Input v-model="projectForm.developer" :disabled="!projectForm.isEdit" maxlength="200"></Input>
+                <Input v-model="projectForm.developer" :disabled="!projectForm.isEdit" :maxlength="200"></Input>
             </FormItem>
             <FormItem label="创建时间" v-if="!addProjectFlag">
                 <Input v-model="projectForm.created" disabled></Input>
             </FormItem>
             <FormItem label="项目描述">
-                <Input v-model="projectForm.remark" placeholder="项目描述" :disabled="!projectForm.isEdit" maxlength="100"></Input>
+                <Input v-model="projectForm.remark" placeholder="项目描述" :disabled="!projectForm.isEdit" :maxlength="100"></Input>
             </FormItem>
         </Form>
     </Modal>
