@@ -5,10 +5,9 @@ import App from './App'
 import router from './router'
 import store from './store'
 import iView from 'iview'
-// import i18n from '@/locale'
 import config from '@/api/api.config.js'
 import importDirective from '@/directive'
-import installPlugin from '@/plugin'
+// import installPlugin from '@/plugin'
 import './index.less'
 import 'iview/dist/styles/iview.css'
 import '@/assets/icons/iconfont.css'
@@ -26,7 +25,7 @@ Vue.use(TreeTable)
 /**
  * @description 注册admin内置插件
  */
-installPlugin(Vue)
+// installPlugin(Vue)
 /**
  * @description 生产环境关掉提示
  */

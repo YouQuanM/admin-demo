@@ -5,23 +5,24 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+// import { mapActions } from 'vuex'
 export default {
   name: 'App',
-  created () {
-    this.getUser()
-  },
+  // created () {
+  //   this.getUser()
+  // },
   methods: {
-    ...mapActions([
-      'getUserInfo'
-    ]),
-    getUser () {
-      this.getUserInfo().then(res => {
-        // this.$router.push({
-        //   name: this.$config.homeName
-        // })
-      })
-    }
+    // 获取用户信息
+    // ...mapActions([
+    //   'getUserInfo'
+    // ]),
+    // getUser () {
+    //   this.getUserInfo().then(res => {
+    //     // this.$router.push({
+    //     //   name: this.$config.homeName
+    //     // })
+    //   })
+    // }
   }
 }
 </script>
