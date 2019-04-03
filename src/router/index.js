@@ -9,7 +9,7 @@ import {
   // canTurnTo,
   setTitle
 } from '@/libs/util'
-// import config from '@/config'
+// import config from '@/api/api.config.js'
 // const {
 //   homeName
 // } = config

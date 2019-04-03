@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 // cookie保存的天数
-import config from '@/config'
+import config from '@/api/api.config.js'
 import {
   forEach,
   hasOneOf,
@@ -9,7 +9,6 @@ import {
 const {
   title,
   cookieExpires
-  // useI18n
 } = config
 
 export const TOKEN_KEY = 'token'
@@ -56,6 +55,7 @@ export const getMenuByRouter = (list, access) => {
       if (showThisMenuEle(item, access)) res.push(obj)
     }
   })
+  console.log(res);
   return res
 }
 

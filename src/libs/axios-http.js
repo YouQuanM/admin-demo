@@ -1,7 +1,7 @@
 import axios from 'axios'
-import config from '@/config'
+import config from '@/api/api.config.js'
 import { Message } from 'iview'
-const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
+const baseUrl = process.env.NODE_ENV === 'development' ? config.develop.baseURL : config.production.baseURL
 
 let instance = axios.create({
   baseURL: baseUrl,

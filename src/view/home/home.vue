@@ -15,6 +15,9 @@
                 <p class="project-list" v-for="(item, index) in projectList" :key="index" @click="showProject(item.code)">{{item.name}}</p>
             </Card>
         </Col>
+        <Col span="10">
+
+        </Col>
       </Row>
       <Modal
         v-model="showProjectFlag"

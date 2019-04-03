@@ -11,13 +11,12 @@ import {
   localSave,
   localRead
 } from '@/libs/util'
-import beforeClose from '@/router/before-close'
 import {
   saveErrorLogger
 } from '@/api/data'
 import router from '@/router'
 import routers from '@/router/routers'
-import config from '@/config'
+import config from '@/api/api.config.js'
 const {
   homeName
 } = config
@@ -68,15 +67,15 @@ export default {
       let tag = state.tagNavList.filter(item => routeEqual(item, route))
       route = tag[0] ? tag[0] : null
       if (!route) return
-      if (route.meta && route.meta.beforeCloseName && route.meta.beforeCloseName in beforeClose) {
-        new Promise(beforeClose[route.meta.beforeCloseName]).then(close => {
-          if (close) {
-            closePage(state, route)
-          }
-        })
-      } else {
-        closePage(state, route)
-      }
+      // if (route.meta && route.meta.beforeCloseName && route.meta.beforeCloseName in beforeClose) {
+      //   new Promise(beforeClose[route.meta.beforeCloseName]).then(close => {
+      //     if (close) {
+      //       closePage(state, route)
+      //     }
+      //   })
+      // } else {
+      closePage(state, route)
+      // }
     },
     addTag (state, {
       route,

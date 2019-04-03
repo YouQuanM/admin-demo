@@ -48,7 +48,6 @@
 
 <script>
 import { showTitle, routeEqual } from '@/libs/util'
-import beforeClose from '@/router/before-close'
 export default {
   name: 'TagsNav',
   props: {
@@ -121,15 +120,15 @@ export default {
       }
     },
     handleClose (current) {
-      if (current.meta && current.meta.beforeCloseName && current.meta.beforeCloseName in beforeClose) {
-        new Promise(beforeClose[current.meta.beforeCloseName]).then(close => {
-          if (close) {
-            this.close(current)
-          }
-        })
-      } else {
-        this.close(current)
-      }
+      // if (current.meta && current.meta.beforeCloseName && current.meta.beforeCloseName in beforeClose) {
+      //   new Promise(beforeClose[current.meta.beforeCloseName]).then(close => {
+      //     if (close) {
+      //       this.close(current)
+      //     }
+      //   })
+      // } else {
+      this.close(current)
+      // }
     },
     close (route) {
       let res = this.list.filter(item => !routeEqual(route, item))

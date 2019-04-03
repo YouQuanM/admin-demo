@@ -164,7 +164,7 @@ export default {
       addAlarmRuleForm: {
         id: null,
         ruleName: '',
-        ruleIndex: 'filebeat-*',
+        ruleIndex: 'danke-infra-location-store-*',
         ruleType: 'frequency',
         projectCode: '',
         messageType: [],
@@ -209,12 +209,13 @@ export default {
         {
           title: '告警描述',
           key: 'alertDesc',
+          width: 120,
           align: 'center'
         },
         {
           title: '告警类型',
           key: 'ruleType',
-          width: 120,
+          minWidth: 150,
           align: 'center'
         },
         {
