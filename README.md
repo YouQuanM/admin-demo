@@ -12,16 +12,18 @@
    - main：外层框架，包括侧边栏菜单，顶部菜单
 4. **directive**
    - 自定义指令
-5. **libs**
+5. **plugin**
+   - 插件（现在里面只有存储errorLog）
+6. **libs**
    - api.request.js：基础的axios，只做了环境判断
    - axios-http.js：封装了axios响应拦截器
    - tools.js：工具方法
    - util.js：方法库，包含了通过routers生成目录菜单的方法
-6. **router**
-7. **store**
+7. **router**
+8. **store**
    - app.js：状态管理，实现面包屑导航，tab标签的开启和关闭，还有一些errorlog等方法
    - user.js：保存用户信息，登录状态，未读消息等
-8. **view**
+9. **view**
 
 **总结一下他原有组件的功能**：
 
