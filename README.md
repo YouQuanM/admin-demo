@@ -27,7 +27,7 @@
 
 1. common-icon 侧边目录的icon
 2. cropper 实现突破剪裁上传（暂时不需要）
-3. info-card 卡片组件 左侧icon右侧自定义
+3. info-card 卡片组件 左侧icon右侧自定义（暂时不需要）
 4. count-to 计数器动画效果 （暂时不需要）
 5. drag-drawer 可拖动抽屉组件 （暂时不需要）
 6. drag-list 可拖动列表组件 （暂时不需要）
