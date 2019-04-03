@@ -11,7 +11,7 @@
 3. **components**
    - main：外层框架，包括侧边栏菜单，顶部菜单
 4. **directive**
-   - 注册方法（我也没看懂干啥用的。。。）
+   - 自定义指令
 5. **libs**
    - api.request.js：基础的axios，只做了环境判断
    - axios-http.js：封装了axios响应拦截器
