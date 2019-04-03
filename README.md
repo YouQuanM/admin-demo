@@ -38,3 +38,13 @@
 11. Paste-editor 对粘贴数据进行格式化的textarea （暂时不需要）
 12. Parent-view 没看懂干啥用
 13. Table
+
+## npm
+
+npm i
+
+npm run dev
+
+npm run build-dev
+
+npm run build-pro
