@@ -1,3 +1,5 @@
+## vue-cli3.0
+
 ## 总结iview-admin src文件
 
 1. **api**
@@ -20,3 +22,19 @@
    - app.js：状态管理，实现面包屑导航，tab标签的开启和关闭，还有一些errorlog等方法
    - user.js：保存用户信息，登录状态，未读消息等
 8. **view**
+
+**总结一下他原有组件的功能**：
+
+1. common-icon 侧边目录的icon
+2. cropper 实现突破剪裁上传（暂时不需要）
+3. info-card 卡片组件 左侧icon右侧自定义
+4. count-to 计数器动画效果 （暂时不需要）
+5. drag-drawer 可拖动抽屉组件 （暂时不需要）
+6. drag-list 可拖动列表组件 （暂时不需要）
+7. markdown md文件编辑器 （暂时不需要）
+8. Icon 
+9. editor 编辑器基础组件 （暂时不需要）
+10. split-pane 分割面板 （暂时不需要）
+11. Paste-editor 对粘贴数据进行格式化的textarea （暂时不需要）
+12. Parent-view 没看懂干啥用
+13. Table
