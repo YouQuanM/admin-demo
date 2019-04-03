@@ -2,7 +2,7 @@ export default {
   /**
    * @description 配置显示在浏览器标签的title
    */
-  title: '供应链配置中心',
+  title: 'demo',
   /**
    * @description token在Cookie中存储的天数，默认1天
    */
