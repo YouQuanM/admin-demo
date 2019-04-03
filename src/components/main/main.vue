@@ -2,6 +2,7 @@
   <Layout style="height: 100%" class="main">
     <!-- 侧边菜单栏 -->
     <Sider
+      breakpoint="md"
       hide-trigger
       collapsible
       :width="256"
